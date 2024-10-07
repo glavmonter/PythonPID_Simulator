@@ -59,7 +59,7 @@ class PID_Controller(object):
         self._d_init = 0
         self.reset()
 
-    def __call__(self, PV=0, SP=0, direction="Direct"):
+    def __call__(self, PV: np.float64 = 0, SP: np.float64 = 0, direction: str = "Direct") -> np.float64:
         """
         Calculate the control value (CV) based on the process variable (PV) and the setpoint (SP).
         """
@@ -151,7 +151,7 @@ class PID_Controller(object):
         self._d_init = 0
         self._lastCV = 0
 
-    def _clamp(self, value, limits):
+    def _clamp(self, value: np.float64, limits: tuple[float, float]) -> np.float64:
         """
         Clamp the given value between the specified limits.
         """
@@ -176,13 +176,13 @@ class FOPDT_Model(object):
         """
         self.work_CV = []
 
-    def change_params(self, data):
+    def change_params(self, data: tuple[float, float, float, float]) -> None:
         """
         Update the model parameters with new values.
         """
         self.Gain, self.Time_Constant, self.Dead_Time, self.Bias = data
 
-    def _calc(self, work_PV, ts):
+    def _calc(self, work_PV: np.float64, ts: list[int]) -> np.float64:
         """
         Calculate the change in the process variable (PV) over time.
         """
@@ -195,7 +195,7 @@ class FOPDT_Model(object):
         dydt = (-(work_PV - self.Bias) + self.Gain * um) / self.Time_Constant
         return dydt
 
-    def update(self, work_PV, ts):
+    def update(self, work_PV: np.float64, ts: list[int]) -> np.float64:
         """
         Update the process variable (PV) using the FOPDT model.
         """
